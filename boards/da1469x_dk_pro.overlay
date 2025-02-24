@@ -1,0 +1,42 @@
+
+
+
+/ {
+	chosen {
+		zephyr,bt-hci = &bt_hci_uart;
+	};
+};
+
+&uart {
+	current-speed = <1000000>;
+};
+
+&pinctrl {
+	uart2_default: uart2_default {
+		group1 {
+			pinmux = <SMARTBOND_PINMUX(UART2_TX, 0, 24)>;
+		};
+		group2 {
+			pinmux = <SMARTBOND_PINMUX(UART2_RX, 0, 25)>;
+			bias-pull-up;
+		};
+	};
+};
+
+&uart2 {
+	current-speed = <115200>;
+	status = "okay";
+	pinctrl-0 = <&uart2_default>;
+	pinctrl-names = "default";
+
+    bt_hci_uart: bt_hci_uart {
+        compatible = "zephyr,bt-hci-uart";
+		status = "okay";
+
+		da1453x {
+			compatible = "renesas,bt-hci-da1453x";
+            reset-gpios = <&gpio0 26 GPIO_ACTIVE_LOW>;
+			status = "okay";
+		};
+    };
+};
